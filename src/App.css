@@ -1,0 +1,531 @@
+/* ─── App Layout ─────────────────────────────────────────── */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+/* ─── Header ─────────────────────────────────────────────── */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 24px;
+}
+
+.logo h1 {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), #d2a8ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.tagline {
+  color: var(--text-secondary);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+/* ─── Workspace (split panel) ────────────────────────────── */
+
+.workspace {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.divider {
+  width: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -3px;
+  width: 7px;
+  height: 40px;
+  transform: translateY(-50%);
+  border-radius: 4px;
+  background: var(--border);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.divider:hover::after {
+  opacity: 1;
+}
+
+/* ─── Panel (shared) ─────────────────────────────────────── */
+
+.panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  flex-shrink: 0;
+}
+
+.panel-header h2 {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+
+/* ─── Status dot ─────────────────────────────────────────── */
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.status-dot.valid {
+  background: var(--success);
+  box-shadow: 0 0 8px rgba(63, 185, 80, 0.4);
+}
+
+.status-dot.error {
+  background: var(--error);
+  box-shadow: 0 0 8px rgba(248, 81, 73, 0.4);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.error-hint {
+  font-size: 11px;
+  color: var(--error);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+}
+
+/* ─── Input Panel ────────────────────────────────────────── */
+
+.editor-area {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.input-editor-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.code-input-editor {
+  min-height: 100%;
+  background: transparent;
+  color: var(--text-primary);
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+.code-input-textarea {
+  outline: none !important;
+  border: none !important;
+  color: transparent !important; /* hide text since pre is below it */
+  caret-color: var(--text-primary);
+}
+
+.code-input-editor pre,
+.code-input-editor textarea {
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+}
+
+.code-input-editor textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.preview-overlay {
+  display: none;
+}
+
+/* ─── Action Buttons (format, copy) ──────────────────────── */
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.action-btn:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg-tertiary);
+}
+
+.action-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.copy-feedback {
+  font-size: 11px;
+  color: var(--success);
+  animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ─── Output Panel ───────────────────────────────────────── */
+
+.lang-select {
+  margin-left: auto;
+  padding: 4px 10px;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.lang-select:hover {
+  border-color: var(--accent);
+}
+
+.lang-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+/* ─── Tab bar ────────────────────────────────────────────── */
+
+.tab-bar {
+  display: flex;
+  gap: 0;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.tab-bar::-webkit-scrollbar {
+  height: 2px;
+}
+
+.tab-bar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.tab {
+  padding: 8px 16px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: rgba(88, 166, 255, 0.05);
+}
+
+/* ─── Tab content ────────────────────────────────────────── */
+
+.tab-content {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  background: var(--bg-primary);
+}
+
+/* ─── Code block ─────────────────────────────────────────── */
+
+.code-block {
+  position: relative;
+  border-radius: var(--radius);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.code-block pre {
+  padding: 16px;
+  overflow: auto;
+  max-height: calc(100vh - 200px);
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 6px;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s, background 0.2s;
+  z-index: 2;
+}
+
+.code-block:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  color: var(--accent);
+  background: var(--bg-tertiary);
+  border-color: var(--accent);
+}
+
+/* ─── Empty state ────────────────────────────────────────── */
+
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-muted);
+  padding: 40px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.empty-state p {
+  font-size: 14px;
+}
+
+/* ─── Config Panel ───────────────────────────────────────── */
+
+.config-panel {
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+  flex-shrink: 0;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 44px;
+  overflow: hidden;
+}
+
+.config-panel.open {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.config-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 24px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.config-toggle:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.chevron {
+  margin-left: auto;
+  transition: transform 0.3s;
+}
+
+.chevron.up {
+  transform: rotate(180deg);
+}
+
+.config-body {
+  display: flex;
+  gap: 32px;
+  padding: 8px 24px 20px;
+  flex-wrap: wrap;
+}
+
+.config-section {
+  min-width: 200px;
+}
+
+.config-section h3 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.config-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.config-row label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  min-width: 100px;
+}
+
+.config-row input[type="text"],
+.config-row select {
+  padding: 4px 10px;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.config-row input[type="text"]:focus,
+.config-row select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  min-width: auto !important;
+}
+
+.checkbox-label input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .workspace {
+    flex-direction: column;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .panel {
+    min-height: 40vh;
+  }
+
+  .app-header {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .config-body {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
