@@ -59,6 +59,8 @@ export type SourceLanguage = 'json' | 'java' | 'go' | 'python' | 'typescript' | 
 
 export type SqlDialect = 'mysql' | 'postgresql' | 'sqlite';
 
+export type JavaORM = 'none' | 'jpa' | 'mybatis-plus';
+
 export type NumberMapping = 'int' | 'long' | 'float' | 'double' | 'BigDecimal';
 
 export interface ConvertConfig {
@@ -74,6 +76,7 @@ export interface ConvertConfig {
   indentSize: 2 | 4;
   sqlDialect: SqlDialect;
   deriveSerde: boolean; // Rust
+  javaOrm: JavaORM;
 }
 
 export const defaultConfig: ConvertConfig = {
@@ -89,4 +92,5 @@ export const defaultConfig: ConvertConfig = {
   indentSize: 4,
   sqlDialect: 'mysql',
   deriveSerde: true,
+  javaOrm: 'none',
 };

@@ -1,4 +1,4 @@
-import type { ConvertConfig, NumberMapping, SqlDialect } from '../engine/types';
+import type { ConvertConfig, NumberMapping, SqlDialect, JavaORM } from '../engine/types';
 
 interface ConfigPanelProps {
   config: ConvertConfig;
@@ -100,6 +100,18 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
                 >
                   <option value="private">private + getters/setters</option>
                   <option value="public">public</option>
+                </select>
+              </div>
+              <div className="config-row">
+                <label htmlFor="java-orm">ORM Annotations</label>
+                <select
+                  id="java-orm"
+                  value={config.javaOrm}
+                  onChange={e => update({ javaOrm: e.target.value as JavaORM })}
+                >
+                  <option value="none">None / Plain</option>
+                  <option value="jpa">JPA / Hibernate</option>
+                  <option value="mybatis-plus">MyBatis-Plus</option>
                 </select>
               </div>
             </div>

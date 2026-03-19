@@ -1,5 +1,5 @@
 import type { ASTNode, ObjectNode, GeneratedFile, ConvertConfig } from '../types';
-import { toCamelCase, toPascalCase } from '../parser';
+import { toCamelCase, toPascalCase, toSnakeCase } from '../parser';
 
 /**
  * Java class generator.
@@ -18,12 +18,31 @@ function collectJavaClasses(
 ): void {
   const indent = ' '.repeat(config.indentSize);
   const lines: string[] = [];
+  const tableName = config.javaOrm !== 'none' ? toSnakeCase(node.name) : '';
 
-  // Lombok annotation
+  // Imports
   if (config.useLombok) {
     lines.push('import lombok.Data;');
+  }
+  if (config.javaOrm === 'jpa') {
+    lines.push('import jakarta.persistence.*;');
+  } else if (config.javaOrm === 'mybatis-plus') {
+    lines.push('import com.baomidou.mybatisplus.annotation.*;');
+  }
+  
+  if (config.useLombok || config.javaOrm !== 'none') {
     lines.push('');
+  }
+
+  // Class Annotations
+  if (config.useLombok) {
     lines.push('@Data');
+  }
+  if (config.javaOrm === 'jpa') {
+    lines.push('@Entity');
+    lines.push(`@Table(name = "${tableName}")`);
+  } else if (config.javaOrm === 'mybatis-plus') {
+    lines.push(`@TableName("${tableName}")`);
   }
 
   lines.push(`public class ${node.name} {`);
@@ -33,9 +52,26 @@ function collectJavaClasses(
   for (const field of node.fields) {
     const javaType = resolveJavaType(field.node, config);
     const fieldName = toCamelCase(field.name);
+    const columnName = toSnakeCase(field.name);
+    const isId = fieldName.toLowerCase() === 'id';
 
     if (config.nullableFields && field.nullable) {
       lines.push(`${indent}// nullable`);
+    }
+
+    if (config.javaOrm === 'jpa') {
+      if (isId) {
+        lines.push(`${indent}@Id`);
+        lines.push(`${indent}@GeneratedValue(strategy = GenerationType.IDENTITY)`);
+      } else {
+        lines.push(`${indent}@Column(name = "${columnName}")`);
+      }
+    } else if (config.javaOrm === 'mybatis-plus') {
+      if (isId) {
+        lines.push(`${indent}@TableId(type = IdType.AUTO)`);
+      } else {
+        lines.push(`${indent}@TableField("${columnName}")`);
+      }
     }
 
     if (config.accessModifier === 'private') {
