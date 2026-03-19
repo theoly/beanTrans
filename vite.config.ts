@@ -13,4 +13,5 @@ export default defineConfig({
       threshold: 1024, // generate .gz for files > 1kb
     })
   ],
+  base: '/bean/',
 })

@@ -1,11 +1,14 @@
+import JSON5 from 'json5';
 import type { ASTNode, ObjectNode, ObjectField, ArrayNode } from './types';
 
 /**
  * Parse a JSON string into a BeanTrans AST tree.
  * Each nested object becomes its own ObjectNode (→ separate class/struct).
+ * 
+ * Uses JSON5 to support unquoted keys and comments
  */
 export function parseJsonToAST(json: string, rootName: string): ObjectNode {
-  const parsed = JSON.parse(json);
+  const parsed = JSON5.parse(json);
   if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
     throw new Error('Top-level value must be a JSON object (not array or primitive).');
   }

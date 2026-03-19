@@ -9,6 +9,7 @@ import 'prismjs/components/prism-kotlin';
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-protobuf';
 import 'prismjs/components/prism-sql';
+import JSON5 from 'json5';
 import type { SourceLanguage } from '../engine/types';
 
 interface InputPanelProps {
@@ -59,7 +60,7 @@ function formatInput(value: string, lang: SourceLanguage): string | null {
   if (!value.trim()) return null;
   if (lang === 'json') {
     try {
-      const parsed = JSON.parse(value);
+      const parsed = JSON5.parse(value);
       return JSON.stringify(parsed, null, 2);
     } catch {
       return null; // can't format invalid JSON
