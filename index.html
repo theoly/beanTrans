@@ -10,14 +10,16 @@
     <link rel="canonical" href="https://ukmms.org/beantrans/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="UKMMS · BeanTrans" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:locale:alternate" content="zh_CN" />
     <meta property="og:title" content="BeanTrans · 9×9 Bi-Directional AST Schema Converter" />
     <meta property="og:description" content="Convert JSON, Java, Go, Python, TypeScript, Kotlin, Rust, Protobuf, and SQL DDL any-to-any directly in your browser." />
     <meta property="og:url" content="https://ukmms.org/beantrans/" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://ukmms.org/assets/og-ukmms.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="BeanTrans · 9×9 Bi-Directional AST Schema Converter" />
     <meta name="twitter:description" content="Zero-backend React AST converter across 9 languages and data schema formats." />
+    <meta name="twitter:image" content="https://ukmms.org/assets/og-ukmms.png" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -30,6 +32,7 @@
       "codeRepository": "https://github.com/theoly/beanTrans",
       "author": {
         "@type": "Organization",
+        "@id": "https://ukmms.org/#organization",
         "name": "UKMMS",
         "url": "https://ukmms.org/"
       },
@@ -39,7 +42,8 @@
         "Automatic splitting of nested objects into companion classes, structs, and tables",
         "Java JPA/Hibernate, MyBatis-Plus, Lombok, and Jackson annotation presets",
         "MySQL, PostgreSQL, and SQLite DDL dialect generation",
-        "Rust Serde derives, Python dataclass, and Go JSON tag configuration"
+        "Rust Serde derives, Python dataclass, and Go JSON tag configuration",
+        "Bilingual EN / ZH-CN interface with one-click source and target swap"
       ]
     }
     </script>
@@ -48,7 +52,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <noscript>
+        <main style="max-width:760px;margin:48px auto;padding:0 24px;font-family:sans-serif;line-height:1.6;">
+          <h1>BeanTrans — 9×9 Bi-Directional AST Schema Converter</h1>
+          <p>Convert JSON, Java, Go, Python, TypeScript, Kotlin, Rust, Protobuf, and SQL DDL directly in your browser with zero backend uploads.</p>
+          <p><a href="https://ukmms.org/">Back to UKMMS</a> · <a href="https://github.com/theoly/beanTrans">GitHub</a></p>
+        </main>
+      </noscript>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
