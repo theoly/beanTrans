@@ -1,16 +1,9 @@
 import { useState } from 'react';
 import Editor from 'react-simple-code-editor';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-java';
-import 'prismjs/components/prism-go';
-import 'prismjs/components/prism-python';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-kotlin';
-import 'prismjs/components/prism-json';
-import 'prismjs/components/prism-protobuf';
-import 'prismjs/components/prism-sql';
+import Prism from '../prism';
 import JSON5 from 'json5';
 import type { SourceLanguage } from '../engine/types';
+import type { BeanTransMessages } from '../i18n';
 
 interface InputPanelProps {
   value: string;
@@ -18,6 +11,7 @@ interface InputPanelProps {
   error: string | null;
   sourceLanguage: SourceLanguage;
   onSourceLanguageChange: (lang: SourceLanguage) => void;
+  t: BeanTransMessages;
 }
 
 const sourceLanguages: { value: SourceLanguage; label: string }[] = [
@@ -285,6 +279,7 @@ export default function InputPanel({
   error,
   sourceLanguage,
   onSourceLanguageChange,
+  t,
 }: InputPanelProps) {
   const [formatFeedback, setFormatFeedback] = useState<string | null>(null);
 
@@ -301,15 +296,15 @@ export default function InputPanel({
   };
 
   return (
-    <div className="panel">
+    <div className="panel input-panel">
       <div className="panel-header">
-        <h2 className="panel-title">Input</h2>
+        <h2 className="panel-title">{t.inputTitle}</h2>
         <span className={`status-dot ${error ? 'error' : value.trim() ? 'valid' : ''}`} />
         {error && <span className="error-hint">{error}</span>}
         <button
           className="action-btn"
           onClick={handleFormat}
-          title="Format / Pretty Print"
+          title={t.formatTitle}
           disabled={!value.trim()}
         >
           {formatFeedback || (
@@ -325,6 +320,7 @@ export default function InputPanel({
           id="source-language-selector"
           className="lang-select"
           value={sourceLanguage}
+          aria-label={t.sourceLangAria}
           onChange={e => onSourceLanguageChange(e.target.value as SourceLanguage)}
         >
           {sourceLanguages.map(l => (

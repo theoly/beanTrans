@@ -21,6 +21,9 @@ function collectJavaClasses(
   const tableName = config.javaOrm !== 'none' ? toSnakeCase(node.name) : '';
 
   // Imports
+  if (config.generateJacksonAnnotations) {
+    lines.push('import com.fasterxml.jackson.annotation.JsonProperty;');
+  }
   if (config.useLombok) {
     lines.push('import lombok.Data;');
   }
@@ -30,7 +33,7 @@ function collectJavaClasses(
     lines.push('import com.baomidou.mybatisplus.annotation.*;');
   }
   
-  if (config.useLombok || config.javaOrm !== 'none') {
+  if (config.generateJacksonAnnotations || config.useLombok || config.javaOrm !== 'none') {
     lines.push('');
   }
 
@@ -57,6 +60,10 @@ function collectJavaClasses(
 
     if (config.nullableFields && field.nullable) {
       lines.push(`${indent}// nullable`);
+    }
+
+    if (config.generateJacksonAnnotations && field.name !== fieldName) {
+      lines.push(`${indent}@JsonProperty("${field.name}")`);
     }
 
     if (config.javaOrm === 'jpa') {

@@ -12,6 +12,7 @@ BeanTrans is a fast, robust, and bi-directional AST conversion engine embedded i
 - **Fine-Tuned Config Engine:** The application provides a configuration drawer offering precise output control, including:
   - **SQL Dialects:** Switch generated DDL between MySQL, PostgreSQL, and SQLite mapping structures.
   - **Java ORM Annotations:** Dynamically append standard `JPA / Hibernate` (`@Entity`, `@Table`, `@Id`) or `MyBatis-Plus` (`@TableName`, `@TableId`) annotations to your generated Java classes along with `Lombok` toggles.
+  - **Jackson Mapping:** Optionally emit `@JsonProperty` on generated Java fields when JSON keys and Java field names differ.
   - **Rust Serde Derives:** Append auto-derives and `rename` macros.
   - **Python Dataclass:** Use modern Python 3.7+ `@dataclass` structures.
   - **Go JSON Tags:** Generate standard Go `json:"field_name"` mappings.

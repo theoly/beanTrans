@@ -69,6 +69,7 @@ export interface ConvertConfig {
   rootClassName: string;
   numberMapping: NumberMapping;
   useLombok: boolean;        // Java
+  generateJacksonAnnotations: boolean; // Java
   useDataclass: boolean;     // Python
   generateJsonTags: boolean; // Go
   accessModifier: 'private' | 'public'; // Java / Kotlin
@@ -85,6 +86,7 @@ export const defaultConfig: ConvertConfig = {
   rootClassName: 'Root',
   numberMapping: 'int',
   useLombok: true,
+  generateJacksonAnnotations: false,
   useDataclass: true,
   generateJsonTags: true,
   accessModifier: 'private',

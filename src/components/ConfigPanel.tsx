@@ -1,13 +1,15 @@
 import type { ConvertConfig, NumberMapping, SqlDialect, JavaORM } from '../engine/types';
+import type { BeanTransMessages } from '../i18n';
 
 interface ConfigPanelProps {
   config: ConvertConfig;
   onChange: (config: ConvertConfig) => void;
   isOpen: boolean;
   onToggle: () => void;
+  t: BeanTransMessages;
 }
 
-export default function ConfigPanel({ config, onChange, isOpen, onToggle }: ConfigPanelProps) {
+export default function ConfigPanel({ config, onChange, isOpen, onToggle, t }: ConfigPanelProps) {
   const update = (patch: Partial<ConvertConfig>) => {
     onChange({ ...config, ...patch });
   };
@@ -19,7 +21,7 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
           <circle cx="12" cy="12" r="3" />
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
         </svg>
-        <span>Config</span>
+        <span>{t.configToggleLabel}</span>
         <svg className={`chevron ${isOpen ? 'up' : ''}`} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polyline points="6 9 12 15 18 9" />
         </svg>
@@ -29,9 +31,9 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
         <div className="config-body">
           {/* General */}
           <div className="config-section">
-            <h3>General</h3>
+            <h3>{t.sectionGeneral}</h3>
             <div className="config-row">
-              <label htmlFor="root-class-name">Root Class Name</label>
+              <label htmlFor="root-class-name">{t.rootClassName}</label>
               <input
                 id="root-class-name"
                 type="text"
@@ -41,7 +43,7 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
               />
             </div>
             <div className="config-row">
-              <label htmlFor="number-mapping">Number Type</label>
+              <label htmlFor="number-mapping">{t.numberType}</label>
               <select
                 id="number-mapping"
                 value={config.numberMapping}
@@ -55,14 +57,14 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
               </select>
             </div>
             <div className="config-row">
-              <label htmlFor="indent-size">Indent</label>
+              <label htmlFor="indent-size">{t.indent}</label>
               <select
                 id="indent-size"
                 value={config.indentSize}
                 onChange={e => update({ indentSize: Number(e.target.value) as 2 | 4 })}
               >
-                <option value="2">2 spaces</option>
-                <option value="4">4 spaces</option>
+                <option value="2">{t.spaces2}</option>
+                <option value="4">{t.spaces4}</option>
               </select>
             </div>
             <div className="config-row">
@@ -72,7 +74,7 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
                   checked={config.nullableFields}
                   onChange={e => update({ nullableFields: e.target.checked })}
                 />
-                Nullable fields
+                {t.nullableFields}
               </label>
             </div>
           </div>
@@ -80,7 +82,7 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
           {/* Java-specific */}
           {config.targetLanguage === 'java' && (
             <div className="config-section">
-              <h3>Java</h3>
+              <h3>{t.sectionJava}</h3>
               <div className="config-row">
                 <label className="checkbox-label">
                   <input
@@ -88,28 +90,38 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
                     checked={config.useLombok}
                     onChange={e => update({ useLombok: e.target.checked })}
                   />
-                  Use Lombok @Data
+                  {t.useLombok}
                 </label>
               </div>
               <div className="config-row">
-                <label htmlFor="access-modifier">Access Modifier</label>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={config.generateJacksonAnnotations}
+                    onChange={e => update({ generateJacksonAnnotations: e.target.checked })}
+                  />
+                  {t.useJackson}
+                </label>
+              </div>
+              <div className="config-row">
+                <label htmlFor="access-modifier">{t.accessModifier}</label>
                 <select
                   id="access-modifier"
                   value={config.accessModifier}
                   onChange={e => update({ accessModifier: e.target.value as 'private' | 'public' })}
                 >
-                  <option value="private">private + getters/setters</option>
-                  <option value="public">public</option>
+                  <option value="private">{t.accessPrivateWithGetters}</option>
+                  <option value="public">{t.accessPublic}</option>
                 </select>
               </div>
               <div className="config-row">
-                <label htmlFor="java-orm">ORM Annotations</label>
+                <label htmlFor="java-orm">{t.ormAnnotations}</label>
                 <select
                   id="java-orm"
                   value={config.javaOrm}
                   onChange={e => update({ javaOrm: e.target.value as JavaORM })}
                 >
-                  <option value="none">None / Plain</option>
+                  <option value="none">{t.ormNone}</option>
                   <option value="jpa">JPA / Hibernate</option>
                   <option value="mybatis-plus">MyBatis-Plus</option>
                 </select>
@@ -122,14 +134,14 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
             <div className="config-section">
               <h3>Kotlin</h3>
               <div className="config-row">
-                <label htmlFor="kt-access">Access Modifier</label>
+                <label htmlFor="kt-access">{t.accessModifier}</label>
                 <select
                   id="kt-access"
                   value={config.accessModifier}
                   onChange={e => update({ accessModifier: e.target.value as 'private' | 'public' })}
                 >
-                  <option value="private">private</option>
-                  <option value="public">public (default)</option>
+                  <option value="private">{t.accessPrivate}</option>
+                  <option value="public">{t.accessPublicDefault}</option>
                 </select>
               </div>
             </div>
@@ -138,7 +150,7 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
           {/* Go-specific */}
           {config.targetLanguage === 'go' && (
             <div className="config-section">
-              <h3>Go</h3>
+              <h3>{t.sectionGo}</h3>
               <div className="config-row">
                 <label className="checkbox-label">
                   <input
@@ -146,7 +158,7 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
                     checked={config.generateJsonTags}
                     onChange={e => update({ generateJsonTags: e.target.checked })}
                   />
-                  Generate json tags
+                  {t.goJsonTags}
                 </label>
               </div>
             </div>
@@ -155,7 +167,7 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
           {/* Python-specific */}
           {config.targetLanguage === 'python' && (
             <div className="config-section">
-              <h3>Python</h3>
+              <h3>{t.sectionPython}</h3>
               <div className="config-row">
                 <label className="checkbox-label">
                   <input
@@ -163,7 +175,7 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
                     checked={config.useDataclass}
                     onChange={e => update({ useDataclass: e.target.checked })}
                   />
-                  Use @dataclass
+                  {t.pythonDataclass}
                 </label>
               </div>
             </div>
@@ -172,7 +184,7 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
           {/* Rust-specific */}
           {config.targetLanguage === 'rust' && (
             <div className="config-section">
-              <h3>Rust</h3>
+              <h3>{t.sectionRust}</h3>
               <div className="config-row">
                 <label className="checkbox-label">
                   <input
@@ -180,7 +192,7 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
                     checked={config.deriveSerde}
                     onChange={e => update({ deriveSerde: e.target.checked })}
                   />
-                  Derive Serialize/Deserialize
+                  {t.rustDeriveSerde}
                 </label>
               </div>
             </div>
@@ -189,9 +201,9 @@ export default function ConfigPanel({ config, onChange, isOpen, onToggle }: Conf
           {/* SQL-specific */}
           {config.targetLanguage === 'sql' && (
             <div className="config-section">
-              <h3>SQL DDL</h3>
+              <h3>{t.sectionSql}</h3>
               <div className="config-row">
-                <label htmlFor="sql-dialect">Dialect</label>
+                <label htmlFor="sql-dialect">{t.sqlDialect}</label>
                 <select
                   id="sql-dialect"
                   value={config.sqlDialect}

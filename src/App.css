@@ -46,6 +46,39 @@
   letter-spacing: 0.5px;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.home-link,
+.lang-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.home-link:hover,
+.lang-toggle-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg-tertiary);
+}
+
 /* ─── Workspace (split panel) ────────────────────────────── */
 
 .workspace {
@@ -60,6 +93,40 @@
   background: var(--border);
   flex-shrink: 0;
   position: relative;
+  z-index: 4;
+}
+
+.swap-btn {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.swap-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg-tertiary);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.input-panel .panel-header {
+  padding-right: 28px;
+}
+
+.output-panel .panel-header {
+  padding-left: 28px;
 }
 
 .divider::after {
@@ -515,14 +582,34 @@
     height: 1px;
   }
 
+  .swap-btn {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .input-panel .panel-header {
+    padding-right: 16px;
+  }
+
+  .output-panel .panel-header {
+    padding-left: 16px;
+  }
+
   .panel {
     min-height: 40vh;
   }
 
   .app-header {
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
     text-align: center;
+  }
+
+  .header-right {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
   }
 
   .config-body {

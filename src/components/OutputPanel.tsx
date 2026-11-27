@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { GeneratedFile, TargetLanguage } from '../engine/types';
+import type { BeanTransMessages } from '../i18n';
 import CodeBlock from './CodeBlock';
 
 interface OutputPanelProps {
@@ -8,6 +9,7 @@ interface OutputPanelProps {
   onTabChange: (index: number) => void;
   language: TargetLanguage;
   onLanguageChange: (lang: TargetLanguage) => void;
+  t: BeanTransMessages;
 }
 
 const languages: { value: TargetLanguage; label: string }[] = [
@@ -43,6 +45,7 @@ export default function OutputPanel({
   onTabChange,
   language,
   onLanguageChange,
+  t,
 }: OutputPanelProps) {
   const currentFile = files[activeTab] || null;
   const [copyFeedback, setCopyFeedback] = useState('');
@@ -50,27 +53,27 @@ export default function OutputPanel({
   const handleCopyAll = async () => {
     const allContent = files.map(f => `// === ${f.fileName} ===\n${f.content}`).join('\n\n');
     const ok = await copyToClipboard(allContent);
-    setCopyFeedback(ok ? '✓ Copied!' : '✗ Failed');
+    setCopyFeedback(ok ? t.copySuccess : t.copyFail);
     setTimeout(() => setCopyFeedback(''), 2000);
   };
 
   const handleCopyCurrent = async () => {
     if (!currentFile) return;
     const ok = await copyToClipboard(currentFile.content);
-    setCopyFeedback(ok ? '✓ Copied!' : '✗ Failed');
+    setCopyFeedback(ok ? t.copySuccess : t.copyFail);
     setTimeout(() => setCopyFeedback(''), 2000);
   };
 
   return (
     <div className="panel output-panel">
       <div className="panel-header">
-        <h2>Output</h2>
+        <h2>{t.outputTitle}</h2>
         {files.length > 0 && (
           <>
             <button
               className="action-btn"
               onClick={handleCopyCurrent}
-              title="Copy current tab"
+              title={t.copyCurrentTitle}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
@@ -81,9 +84,9 @@ export default function OutputPanel({
               <button
                 className="action-btn copy-all-btn"
                 onClick={handleCopyAll}
-                title="Copy all tabs"
+                title={t.copyAllTitle}
               >
-                All
+                {t.copyAllLabel}
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
@@ -97,6 +100,7 @@ export default function OutputPanel({
           id="language-selector"
           className="lang-select"
           value={language}
+          aria-label={t.targetLangAria}
           onChange={e => onLanguageChange(e.target.value as TargetLanguage)}
         >
           {languages.map(l => (
@@ -124,7 +128,11 @@ export default function OutputPanel({
           </div>
           {currentFile && (
             <div className="tab-content">
-              <CodeBlock code={currentFile.content} language={currentFile.language} />
+              <CodeBlock
+                code={currentFile.content}
+                language={currentFile.language}
+                copyTitle={t.copyBlockTitle}
+              />
             </div>
           )}
         </>
@@ -133,7 +141,7 @@ export default function OutputPanel({
       {files.length === 0 && (
         <div className="empty-state">
           <div className="empty-icon">⚡</div>
-          <p>Enter valid input to see generated code</p>
+          <p>{t.emptyStateHint}</p>
         </div>
       )}
     </div>
